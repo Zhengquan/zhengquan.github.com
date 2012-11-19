@@ -452,6 +452,7 @@ p.delicious-extended:before { content: ' — '; }
 
 /* @group Footer */
 #footer {
+  clear: left;
 	margin-top: 0;
 	color: grey;
 	font-size: 87.5%;
@@ -547,3 +548,16 @@ img.maruku-png { }
 	color:#FFF;
 }
 
+.social{
+  padding-left: 0px;
+}
+.social li{
+  float: left;
+  background: none;
+  list-style: none;
+  margin-top: 0px;
+  padding-left: 15px;
+}
+#page img{
+  width: 638px;
+}
