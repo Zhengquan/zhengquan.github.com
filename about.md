@@ -4,13 +4,14 @@ title: About Me
 ---
 <div class="full">
   <h2>About Me</h2>
-<p>Just A Lazy Boy(～ o ～)~zZ</p>
+<p style='padding-left: 35px'>Just A Lazy Boy(～ o ～)~zZ</p>
 </div>
 <div class="full">
   <h2>Follow Me</h2>
   <ul class="social">
-    <li><a href="http://github.com/zhengquan"><img src="http://huangzhimin.com/images/github.png" /></a></li>
-    <li><a href="mailto:yangzhengquan@gmail.com"><img src="http://huangzhimin.com/images/gmail.png" /></a></li>
-    <li><a href="http://twitter.com/zrOrz"><img src="http://huangzhimin.com/images/twitter.png" /></a></li>
+    <li><a href="http://github.com/zhengquan"><img src="/assets/images/github.png" /></a></li>
+    <li><a href="mailto:yangzhengquan@gmail.com"><img src="/assets/images/gmail.png" /></a></li>
+    <li><a href="http://twitter.com/zrOrz"><img src="/assets/images/twitter.png" /></a></li>
   </ul>
 </div>
+
