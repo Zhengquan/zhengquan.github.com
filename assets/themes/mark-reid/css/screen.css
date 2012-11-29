@@ -58,6 +58,7 @@ h3 {
 	font-size: 100%;
 	line-height: 1.1em;
 	margin:1.5em 0 1.5em 0;
+	font-weight:bold;
 }
 hr { 
 	border-top: 1px solid silver;
@@ -363,6 +364,8 @@ code {
 	font-size: 1.1em;
 	background-color: #f7f7ff;
 	line-height: 1.4em;
+  padding-bottom: 5px;
+  padding-top: 5px;
 }
 pre > code {
 	background-color: transparent;
