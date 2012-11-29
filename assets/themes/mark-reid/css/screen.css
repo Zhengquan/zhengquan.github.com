@@ -21,7 +21,7 @@ body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,p,blockquote,th,t
 /* @end */
 
 body {
-	font-family: Palatino, georgia, "times new roman", serif;
+	font-family: Georgia,'Helvetica Neue', 'Hiragino Sans GB', Helvetica, Arial, Sans-serif;
 	background-color: whitesmoke;
 	background-position: center -18em;
 	background-repeat: repeat-x; 
@@ -32,7 +32,7 @@ img { -ms-interpolation-mode:bicubic; }
 
 /* IE6 ignores this and uses default size of 16pt */
 html>body { font-size:16px; }
-p { margin: 0 0 1.5em 0; text-align: justify; }
+p { margin: 0 0 1.5em 0; }
 
 a { text-decoration: none; color: #339; }
 a:hover { text-decoration: underline; color: #33f; }
@@ -45,7 +45,7 @@ h1,h2,h3,h4 {
 	font-size:1.5em; 
 	font-weight: normal; 
 	clear: left; 	
-	font-family: 'lucida grande', sans-serif; 
+  font-family: 'Helvetica Neue', 'Hiragino Sans GB', Helvetica, Arial, Sans-serif;
 }
 h1 { margin-bottom: 1em; }
 h2 {
@@ -54,7 +54,11 @@ h2 {
 	margin:1.5em 0 1.5em 0;
 	font-weight:bold;
 }
-
+h3 {
+	font-size: 100%;
+	line-height: 1.1em;
+	margin:1.5em 0 1.5em 0;
+}
 hr { 
 	border-top: 1px solid silver;
 	border-bottom: none;
@@ -160,7 +164,6 @@ caption {
 
 /* @end */
 
-/* @group Lists */
 ul {
 	margin-top: 1.5em;
 	margin-bottom: 1.5em;
@@ -357,7 +360,7 @@ pre:hover {
 	overflow: visible;
 }
 code {
-	font-size: 1em;
+	font-size: 1.1em;
 	background-color: #f7f7ff;
 	line-height: 1.4em;
 }
@@ -565,4 +568,3 @@ img.maruku-png { }
   max-width: 638px;
   margin-top: 15px;
 }
-

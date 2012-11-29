@@ -120,28 +120,65 @@ wc
 即使是对静态文件只做了很小的变动，下次部署时Capistrnao也会把所有的静态文件重新编译一遍。
 
 ##4. 使用turbo-sprockets-rails3加速静态文件编译
-[turbo-sprockets-rails3](https://github.com/ndbroadbent/turbo-sprockets-rails3) 通过生成代码的Hash值，来判断本次**rake assets:precompile**是否需要编译该静态文件，每次部署只编译那些有变动的文件，来加速部署流程，ndbroadbent 同时也提供了turbo-sprockets-rails3
-和Capistrano的集成方案。
+[turbo-sprockets-rails3](https://github.com/ndbroadbent/turbo-sprockets-rails3) 通过生成代码的Hash值，来判断本次**rake assets:precompile**是否需要编译该静态文件，每次部署只编译那些有变动的文件，来加速部署流程。
 
-* 用法：
-  {% highlight ruby %}
-  #Gemfile
-  group :assets do
-    ...
-    gem 'turbo-sprockets-rails3'
-  end
-  {% endhighlight %}
-  
-  配置deploy.rb
-  {% highlight ruby %}
-  set :rake,      "rake"      #不要设置为symbol类型
-  set :rails_env, "production"
-  set :asset_env, "RAILS_GROUPS=assets"
-  {% endhighlight %}
+### 用法：
+{% highlight ruby %}
+#Gemfile
+group :assets do
+  ...
+  gem 'turbo-sprockets-rails3'
+end
+{% endhighlight %}
 
-* 处理过期的静态文件
-* 回滚(rollback)
-* 部署流程
+{% highlight ruby %}
+#config/deploy.rb
+set :rake,      "rake"      #不要设置为symbol类型
+set :rails_env, "production"
+set :asset_env, "RAILS_GROUPS=assets"
+{% endhighlight %}
+
+### 处理过期的静态文件    
+turbo-sprockets-rails3
+提供了`assets:clean_expired`的Capistrano任务来清理已经过期的静态文件，静态文件过期时间的设置如下：
+{% highlight ruby %}
+#config/environments/production.rb
+config.assets.expire_after 2.weeks
+
+#config/deploy.rb
+set :expire_assets_after, (60 * 60 * 24 * 7 * 2)
+{% endhighlight %}
+在执行清理之前，这个任务会首先生成一个`REQUIRED_ASSETS`文件，里面包含了所有使用到的静态文件，找到
+共享assets文件夹中已经过期、且出现在`REQUIRED_ASSETS`文件中的文件。
+`REQUIRED_ASSETS`文件格式和实际执行的清理命令：
+{% highlight ruby%}
+# 文件格式
+...
+rails_admin/magnifier.png
+rails_admin/magnifier-04a090a6bfb77b60ce30f0ef3e6ecba5.png
+rails_admin/magnifier.png.gz
+rails_admin/magnifier-04a090a6bfb77b60ce30f0ef3e6ecba5.png.gz
+...
+# 清理指令
+cd -- #{shared_path.shellescape}/assets/ &&
+for f in $(
+  find * -mmin +#{expire_after_mins.to_s.shellescape} -type f | sort |
+  comm -23 -- - #{deploy_to.shellescape}/REQUIRED_ASSETS
+); do
+  echo "Removing unneeded asset: $f";
+  rm -f -- "$f";
+done;
+rm -f -- #{deploy_to.shellescape}/REQUIRED_ASSETS
+{% endhighlight %}
+
+### 回滚(rollback)  
+每一个release中都会有一个代表当前版本assets信息的`assets_manifest.yml`文件，
+回滚时，用该文件覆盖共享静态文件夹下的`manifest.yml`文件即可。
+{% highlight ruby %}
+deploy:assets:rollback
+{% endhighlight %}
+
+### 部署流程
 
 ## 5. 使用CDN加速静态文件获取速度
 引用资源:
