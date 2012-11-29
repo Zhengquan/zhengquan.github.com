@@ -104,7 +104,38 @@ Capistrano编译静态文件的流程如下:
 这种方式的优点在于实现了生产环境下几乎零宕机的部署方式，但是这种方案每次部署都会重新预编译所有的静态文件，
 当项目的JavaScript、CSS逐渐增加时，执行预编译任务会变得越来越慢，有时甚至需要5-10分钟，[czarneckid](https://github.com/czarneckid)
 提出了一种方案来加速编译过程：
-{% gist 3072362 %}
+{% highlight ruby %}
+# -*- encoding : utf-8 -*-
+
+set :assets_dependencies, %w(app/assets lib/assets vendor/assets Gemfile.lock config/routes.rb)
+
+namespace :deploy do
+  namespace :assets do
+
+    desc <<-DESC
+      Run the asset precompilation rake task. You can specify the full path \
+      to the rake executable by setting the rake variable. You can also \
+      specify additional environment variables to pass to rake via the \
+      asset_env variable. The defaults are:
+
+        set :rake,      "rake"
+        set :rails_env, "production"
+        set :asset_env, "RAILS_GROUPS=assets"
+        set :assets_dependencies, fetch(:assets_dependencies) + %w(config/locales/js)
+    DESC
+    task :precompile, :roles => :web, :except => { :no_release => true } do
+      from = source.next_revision(current_revision)
+      if capture("cd #{latest_release} && #{source.local.log(from)} #{assets_dependencies.join ' '} | wc -l").to_i > 0
+        run %Q{cd #{latest_release} && #{rake} RAILS_ENV=#{rails_env} #{asset_env} assets:precompile}
+      else
+        logger.info "Skipping asset pre-compilation because there were no asset changes"
+      end
+    end
+
+  end
+end
+{% endhighlight %}
+
 在每次编译静态文件之前，执行`git log current_revision.. assets_paths |
 wc
 -l`来判断这次部署有没有静态文件的改变，当分支没有静态文件修改时，无需重新编译静态文件便可完成部署，这种方式的缺陷在于：
