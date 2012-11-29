@@ -363,6 +363,8 @@ code {
 }
 pre > code {
 	background-color: transparent;
+  display: block;
+  overflow: auto;
 }
 /* @end */
 
@@ -563,3 +565,4 @@ img.maruku-png { }
   max-width: 638px;
   margin-top: 15px;
 }
+
