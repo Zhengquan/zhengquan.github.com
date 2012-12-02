@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Assets Pipeline - Rails的部署和优化(静态文件篇)"
-category: 'Rails'
+category: 'rails'
 tags: [Capistrano, Rails, Sprockets, Deployment]
 ---
 {% include JB/setup %}

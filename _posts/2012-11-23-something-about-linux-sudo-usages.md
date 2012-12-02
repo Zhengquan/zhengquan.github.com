@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "使用Linux sudo切换用户"
-category: Linux
+category: linux
 tags: [Linux, gitosis, Ubuntu]
 ---
 {% include JB/setup %}
