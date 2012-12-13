@@ -2,19 +2,11 @@
 layout: post
 title: '在Rails 3中使用carrierwave和ffmpeg处理音频上传、转换、下载'
 category: rails
-tags: [carrierwave, ffmpeg, audio convertion, curl, html5]
+tags: [carrierwave, ffmpeg, audio convertion, resque, nginx, curl, html5]
 ---
 {% include JB/setup %}
 
-Thoughts:
-
-* uploader -> carrierwave => file | mongo
-* ffmpeg arguments
-* download => authentication => nginx sendfile
-* rails & curl
-* carrierWave backgrounder
-* sendfile
-
+## 背景
 在Rails、Sinatra等Rack应用中，可以使用[ Carrierwave ](https://github.com/jnicklas/carrierwave)
 来实现图像的上传、处理等功能，还可以使用Carrierwave生成多种格式的上传文件，这里我们也可以采用
 Carrierwave来实现Rails应用的音频上传。  
@@ -104,7 +96,7 @@ make && make install
 ## 2.streamio-ffmpeg 和 carrierwave-video
 [streamio-ffmpeg](https://github.com/streamio/streamio-ffmpeg)实现了对于ffmpeg的封装，
 [
-carrierwave-video](https://github.com/rheaton/carrierwave-video)通过streamio-ffmpeg这个
+carrierwave-video](https://github.com/rheaton/carrierwave-video)通过`streamio-ffmpeg`这个
 gem实现了Carrierwave的音频、视频处理模块。  
 首先需要在Gemfile中增加：
 {% highlight ruby %}
@@ -123,8 +115,6 @@ end
 
 `VoiceUploader`的实现如下:
 {% highlight ruby %}
-# encoding: utf-8
-
 class VoiceUploader < CarrierWave::Uploader::Base
 
   include CarrierWave::Video
@@ -134,16 +124,12 @@ class VoiceUploader < CarrierWave::Uploader::Base
   storage :file
 
   def self.need?
-    Proc.new{|version, current_version|  current_version[:file].extension != version.to_s }
+    Proc.new{|origin_file, current_version| current_version[:version].to_s != origin_file.file.extension }
   end
 
   def filename 
     "#{secure_token}.#{model.audio.file.extension}" if original_filename 
   end 
-
-  def move_to_cache
-    true
-  end
 
   def move_to_store
     true
@@ -179,20 +165,6 @@ class VoiceUploader < CarrierWave::Uploader::Base
 end
 {% endhighlight %}
 
-定义`Voice`模型，并挂载`:audio`至`VoiceUploader`
-{% highlight ruby %}
-class Voice < ActiveRecord::Base
-  attr_accessible :audio
-
-  mount_uploader :audio,  VoiceUploader
-
-  def access_url version=nil
-    name = self.audio.file.filename
-    [name[0...name.rindex('.')], version || self.audio.file.extension ].join('.')
-  end
-end
-{% endhighlight %}
-
 注意到由于权限控制的因素，音频并没有存储在public路径下，所以也就无法直接通过
 一个固定链接公开获取到该音频文件，需要应用自身来实现文件的下载功能：
 {% highlight ruby %}
@@ -222,7 +194,42 @@ end
 {% endhighlight %}
 
 ---
-## 3. 使用Resque后台异步处理音频转码
+## 3. 使用Resque异步处理音频转码
+音频文件越大，转码所耗费的时间也就越长，有时甚至会引起应用服务器的阻塞，可以使用[carrierwave_backgrounder](https://github.com/jnicklas/carrierwave/wiki/_pages)把文件的处理或者存储放到后台处理。  
+使用时只需要在对应文件增加下面代码:  
+初始化`carrierwave_backgrounder`:
+{% highlight ruby %}
+CarrierWave::Backgrounder.configure do |c|
+  c.backend :resque, queue: 'audio_conversion'
+end
+{% endhighlight %}
+
+模型：
+{% highlight ruby %}
+class Voice < ActiveRecord::Base
+
+  mount_uploader :audio,  VoiceUploader
+
+  process_in_background :audio
+end
+{% endhighlight %}
+
+VoiceUploader:
+{% highlight ruby %}
+class VoiceUploader < CarrierWave::Uploader::Base
+  include CarrierWave::Backgrounder::Delay
+end
+{% endhighlight %}
+运行结果：
+{% highlight bash %}
+*** got: (Job{audio_conversion} | CarrierWave::Workers::ProcessAsset | ["Voice", "22", "audio"])
+Running transcoding...
+/usr/local/bin/ffmpeg -y -i /Users/yangkit/Workspace/blog/public/uploads/tmp/20121214-0001-69490-5080/mp3_bc7dea91-5004-49c0-a220-a0e62e2aa434.amr -s 640x360   -aspect 1.7777777777777777 /Users/yangkit/Workspace/blog/public/uploads/tmp/20121214-0001-69490-5080/tmpfile.mp3
+...
+
+*** done: (Job{audio_conversion} | CarrierWave::Workers::ProcessAsset | ["Voice", "22", "audio"])
+{% endhighlight %}
+
 ---
 ## 4. Nginx 和 X-Accel-Mapping
 在`VoicesController`中，所有的音频下载请求都由后端处理，这样无疑会增加服务器的压力，解决的办法就是使用`X-Sendfile`把文件下载请求由后端应用转交给前端 web 服务器处理。  
@@ -344,5 +351,6 @@ curl --header 'Cookie:remember_user_token=xxxx;_blog_session=xxxx' http://0.0.0.
 * [使用 Nginx 的 X-Sendfile 机制提升 PHP 文件下载性能](http://www.lovelucy.info/x-sendfile-in-nginx.html)
 * [RoR网站如何利用lighttpd的X-sendfile功能提升文件下载性能](http://robbin.iteye.com/blog/154538)
 * [How Rails, Nginx and X-Accel-Redirect Work Together](http://thedataasylum.com/articles/how-rails-nginx-x-accel-redirect-work-together.html)
+* [How to use Delayed Job to handle your Carrierwave processing](http://www.freezzo.com/2011/01/06/how-to-use-delayed-job-to-handle-your-carrierwave-processing/)
 
 __EOF__
