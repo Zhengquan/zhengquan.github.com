@@ -4,7 +4,7 @@ title: About Me
 ---
 <div class="full">
   <h2>About Me</h2>
-<p style='padding-left: 35px'>Just A Lazy Boy(～ o ～)~zZ</p>
+<p style='padding-left: 35px'>(～ o ～)~zZ</p>
 </div>
 <div class="full">
   <h2>Follow Me</h2>
