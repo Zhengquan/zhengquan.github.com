@@ -11,6 +11,7 @@ title: About Me
   <ul class="social">
     <li><a href="http://github.com/zhengquan"><img src="/assets/images/github.png" /></a></li>
     <li><a href="mailto:yangzhengquan@gmail.com"><img src="/assets/images/gmail.png" /></a></li>
+    <li><a href="http://weibo.com/guru"><img src="/assets/images/weibo.png" /></a></li>
     <li><a href="http://twitter.com/zrOrz"><img src="/assets/images/twitter.png" /></a></li>
   </ul>
 </div>

@@ -573,7 +573,6 @@ img.maruku-png { }
   margin-top: 15px;
 }
 p code, li code {
-  display: inline-block;
   font-size: 1.0em;
   line-height: 1.5em;
   color: #555;
