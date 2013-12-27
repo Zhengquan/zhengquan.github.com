@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "cron job与环境变量"
+title: "Cron job与环境变量"
 category: linux
 tags: [crontab, bash]
 ---
@@ -26,7 +26,7 @@ _=/usr/bin/env
 
 ### Questions
 
-1.如何在设置cron job所需环境变量?
+1.如何设置cron job所需环境变量?
 
 不要期望cron进程会自动设置JAVA_HOME, GEM_HOME,
 GEM_PATH等自定义变量，一个比较好的实践是除了默认变量之外，在cron job脚本中设置好所有必要的路径和变量值。
@@ -48,14 +48,27 @@ SHELL=/bin/bash
 
 2.为什么`source ~/.bashrc`失效
 
-再解释这个问题之前，需要区别这样两组概念:
+对于如下的cron job:
+{% highlight bash %}
+* */1 * * * source ~/.bashrc && /foo/bar/script.sh
+{% endhighlight %}
+Cron job执行时,
+仍然无法获取`~/.bashrc`设置的变量，这是由于`~/.bashrc`文件中下面代码造成的:
 
-* login shell 和 non-login shell  
-* interactive shell 和 non-interactive shell
+{% highlight bash %}
+# If not running interactively, don't do anything
+[ -z "$PS1" ] && return
+{% endhighlight %}
 
+需要区别这样一组概念:
 
+* interactive shell 和 non-interactive shell  
+interactive shell可以接受来自终端设备的命令，响应用户命令，所以通过SSH登录打开的Shell、手动打开的Shell都是interactive
+shell，而通常运行一个脚本的shell都是non-interactive shell, 这种类型的shell不需要和用户进行交互，所以执行cron job的shell也是non-interactive shell。  
+区别这两种shell的方法之一，就是判断`$PS1`(用户提示符)变量是否被设置，所以cron job无法加载这段代码之后设置的环境变量。
 
 ### Reference
 1. [crontab环境变量](http://justwinit.cn/post/3377/)
 2. [login shell和non-login shell的区别](http://www.isayme.org/linux-diff-between-login-and-non-login-shell.html)
-
+3. [交互式shell和非交互式shell、登录shell和非登录shell的区别](http://www.cnblogs.com/yangqionggo/p/3280891.html)
+4. [Interactive and non-interactive shells and scripts](http://www.tldp.org/LDP/abs/html/intandnonint.html)
