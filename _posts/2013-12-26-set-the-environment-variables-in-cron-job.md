@@ -6,7 +6,7 @@ tags: [crontab, bash]
 ---
 {% include JB/setup %}
 
-### Cron Job默认环境变量
+### Background
 在添加系统的cron job时，或多或少都会遇到cron job不能按照预期工作的情况，这个时候就要大胆的把问题定位在系统环境变量的设置上。cron进程在启动cron job时，只会自动设置一些默认的变量，如：
 
 {% highlight bash %}
@@ -72,3 +72,5 @@ shell，而通常运行一个脚本的shell都是non-interactive shell, 这种�
 2. [login shell和non-login shell的区别](http://www.isayme.org/linux-diff-between-login-and-non-login-shell.html)
 3. [交互式shell和非交互式shell、登录shell和非登录shell的区别](http://www.cnblogs.com/yangqionggo/p/3280891.html)
 4. [Interactive and non-interactive shells and scripts](http://www.tldp.org/LDP/abs/html/intandnonint.html)
+5. [CRONTAB BEST PRACTICE](http://blog.endpoint.com/2008/12/best-practices-for-cron.html)
+---
