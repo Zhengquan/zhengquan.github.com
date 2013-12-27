@@ -64,7 +64,7 @@ Cron job执行时,
 
 * interactive shell 和 non-interactive shell  
 interactive shell可以接受来自终端设备的命令，响应用户命令，所以通过SSH登录打开的Shell、手动打开的Shell都是interactive
-shell，而通常运行一个脚本的shell都是non-interactive shell, 这种类型的shell不需要和用户进行交互，所以执行cron job的shell也是non-interactive shell。  
+shell，而通常运行一个脚本的shell都是non-interactive shell, 这种类型的shell不需要和用户进行交互，执行cron job的shell也是non-interactive shell。  
 区别这两种shell的方法之一，就是判断`$PS1`(用户提示符)变量是否被设置，所以cron job无法加载这段代码之后设置的环境变量。
 
 ### Reference
@@ -73,4 +73,5 @@ shell，而通常运行一个脚本的shell都是non-interactive shell, 这种�
 3. [交互式shell和非交互式shell、登录shell和非登录shell的区别](http://www.cnblogs.com/yangqionggo/p/3280891.html)
 4. [Interactive and non-interactive shells and scripts](http://www.tldp.org/LDP/abs/html/intandnonint.html)
 5. [CRONTAB BEST PRACTICE](http://blog.endpoint.com/2008/12/best-practices-for-cron.html)
+
 ---
