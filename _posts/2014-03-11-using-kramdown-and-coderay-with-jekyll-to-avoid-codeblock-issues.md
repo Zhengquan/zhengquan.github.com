@@ -2,29 +2,24 @@
 layout: default
 title: Silly Test Post
 ---
+1. Item one, with code block
 
-1. AAA
-This is a code block from ruby
+   ~~~
+   def test
+     puts "Hello"
+   end
+   ~~~
+   {:.language-ruby}
 
-~~~
-def what?
-  42
-end
-~~~
-{: .language-ruby}
+2. Item two
 
-2. BBBB
+...
 
-This is a paragraph element before a codeblocked block of C code.
+10. Item ten
 
-~~~
-int main(void) {
-    printf("Hello world!");
-    return 0;
-}
-~~~
-{: .language-c}
+   ~~~
+   This code block has four spaces before it
+   ~~~
 
-Another paragraph element.
+       This code block has eight (4+4) spaces before it
 
-3. CCCC
