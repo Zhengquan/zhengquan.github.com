@@ -4,12 +4,25 @@ permalink: /:categories/:year/:month/:day/:title
 
 exclude: [".rvmrc", ".rbenv-version", "README.md", "Rakefile", "changelog.md"]
 pygments: false
+search: true
 #markdown: rdiscount
 markdown: kramdown
 kramdown:
   use_coderay: true
   coderay:
     coderay_line_numbers: table
+ 
+
+# so-simple-theme
+links:
+  - title: Home
+    url: /
+  - title: Articles
+    url: /archive.html
+  - title: Category
+    url: /categories.html
+  - title: About
+    url: /about.html
 
 # Themes are encouraged to use these universal variables 
 # so be sure to set them if your theme uses them.
@@ -25,7 +38,7 @@ author :
 
 owner:
   name: Zhengquan Yang
-  avatar: assets/images/yangkit.jpg
+  avatar: yangkit.jpg
   email: yangzhengquan@gmail.com
 
 # The production_url is only used when full-domain names are needed
