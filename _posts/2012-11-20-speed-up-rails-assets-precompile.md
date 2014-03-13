@@ -20,58 +20,65 @@ Pipeline是一个可以组合、压缩JavaScript/CSS文件的框架，其具有�
   支持更高级别(High-Level)的语法，可以使用CoffeeScript, Sass, SCSS, LESS等来撰写静态文件。
 
 ------------
+
 ## 2. Sprockets和Tilt
 * Sprockets  
   完成对静态文件的打包、编译、压缩并存放在目标目录**public/assets**下
 * Tilt  
   Sprockets使用Tilt作为静态文件的模板引擎，可以通过下面的方式查看当前的Sprockets环境中
   已经注册的模板引擎  
-{% highlight ruby %}
-MyApp::Application.assets.engines
-=> 
-{".coffee"=>Tilt::CoffeeScriptTemplate,
- ".jst"=>Sprockets::JstProcessor,
- ".eco"=>Sprockets::EcoTemplate,
- ".ejs"=>Sprockets::EjsTemplate,
- ".less"=>Less::Rails::LessTemplate,
- ".sass"=>Sass::Rails::SassTemplate,
- ".scss"=>Sass::Rails::ScssTemplate,
- ".erb"=>Tilt::ERBTemplate,
- ".str"=>Tilt::StringTemplate,
- ".hbs"=>HandlebarsAssets::TiltHandlebars
-}  
-{% endhighlight %}  
+
+  ~~~
+  MyApp::Application.assets.engines
+  => 
+  {".coffee"=>Tilt::CoffeeScriptTemplate,
+   ".jst"=>Sprockets::JstProcessor,
+   ".eco"=>Sprockets::EcoTemplate,
+   ".ejs"=>Sprockets::EjsTemplate,
+   ".less"=>Less::Rails::LessTemplate,
+   ".sass"=>Sass::Rails::SassTemplate,
+   ".scss"=>Sass::Rails::ScssTemplate,
+   ".erb"=>Tilt::ERBTemplate,
+   ".str"=>Tilt::StringTemplate,
+   ".hbs"=>HandlebarsAssets::TiltHandlebars
+  }  
+  ~~~
+  {:.language-ruby}
+
 Assets Pipeline编译、压缩静态文件的流程如下：  
 ![Assets Pipeline Flow](/assets/images/asset_pipeline_flow.png)  
 
 * Sprockets和Rack  
 `Sprockets::Server`模块是一个Rack协议的实现，接受一个代表当前env的Hash，`Sprockets::Server`通过综合Last-Modified、Etag等请求信息，返回一个带有状态行、消息报头、响应正文的数组，其中响应报头的格式如下：
-{% highlight ruby %}
-def headers(env, asset, length)
-  Hash.new.tap do |headers|
-    # Set content type and length headers
-    headers["Content-Type"]   = asset.content_type
-    headers["Content-Length"] = length.to_s
 
-    # Set caching headers
-    headers["Cache-Control"]  = "public"
-    headers["Last-Modified"]  = asset.mtime.httpdate
-    headers["ETag"]           = etag(asset)
-
-    # If the request url contains a fingerprint, set a long
-    # expires on the response
-    if attributes_for(env["PATH_INFO"]).path_fingerprint
-      headers["Cache-Control"] << ", max-age=31536000"
-
-    # Otherwise set `must-revalidate` since the asset could be modified.
-    else
-      headers["Cache-Control"] << ", must-revalidate"
+  ~~~
+  def headers(env, asset, length)
+    Hash.new.tap do |headers|
+      # Set content type and length headers
+      headers["Content-Type"]   = asset.content_type
+      headers["Content-Length"] = length.to_s
+  
+      # Set caching headers
+      headers["Cache-Control"]  = "public"
+      headers["Last-Modified"]  = asset.mtime.httpdate
+      headers["ETag"]           = etag(asset)
+  
+      # If the request url contains a fingerprint, set a long
+      # expires on the response
+      if attributes_for(env["PATH_INFO"]).path_fingerprint
+        headers["Cache-Control"] << ", max-age=31536000"
+  
+      # Otherwise set `must-revalidate` since the asset could be modified.
+      else
+        headers["Cache-Control"] << ", must-revalidate"
+      end
     end
   end
-end
-{% endhighlight %}
+  ~~~
+  {:.language-ruby}
 
 ------------
+
 ## 3. Capistrano Assets的部署流程
 如果Rails项目启用了Assets
 Pipeline，则需要在Capify文件中加入下面的代码来启用静态文件预编译和压缩功能。
@@ -104,11 +111,9 @@ Capistrano编译静态文件的流程如下:
 这种方式的优点在于实现了生产环境下几乎零宕机的部署方式，但是这种方案每次部署都会重新预编译所有的静态文件，
 当项目的JavaScript、CSS逐渐增加时，执行预编译任务会变得越来越慢，有时甚至需要5-10分钟，[czarneckid](https://github.com/czarneckid)
 提出了一种方案来加速编译过程：
-{% highlight ruby %}
-# -*- encoding : utf-8 -*-
 
+~~~
 set :assets_dependencies, %w(app/assets lib/assets vendor/assets Gemfile.lock config/routes.rb)
-
 namespace :deploy do
   namespace :assets do
 
@@ -134,7 +139,8 @@ namespace :deploy do
 
   end
 end
-{% endhighlight %}
+~~~
+{:.language-ruby}
 
 在每次编译静态文件之前，执行`git log current_revision.. assets_paths |
 wc

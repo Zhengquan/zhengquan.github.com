@@ -350,17 +350,15 @@ pre {
   background: white url('/assets/images/noise.png') top left !important;
   border: 1px solid #ddc;
   padding: 0.5em 1em;
-  overflow: hidden;
+  overflow: scroll;
+  overflow-y: hidden;
 
   /* Experimental CSS3 stuff */
   box-shadow: 1px 1px 6px #ccc;
   -webkit-box-shadow: 1px 1px 6px #ccc;
   -moz-box-shadow: 1px 1px 6px #ccc;
 }
-pre:hover {
-  border-right: none;
-  overflow: visible;
-}
+
 code {
   font-size: 1.1em;
   background-color: #f7f7ff;
@@ -580,4 +578,8 @@ p code, li code {
   border-radius: 0.4em;
   padding: 0px 0.3em;
   margin: -1px 0px;
+}
+
+.code pre{
+  width: 550px;
 }

@@ -9,7 +9,7 @@ tags: [crontab, bash]
 ### Background
 在添加系统的cron job时，或多或少都会遇到cron job不能按照预期工作的情况，这个时候就要大胆的把问题定位在系统环境变量的设置上。cron进程在启动cron job时，只会自动设置一些默认的变量，如：
 
-{% highlight bash %}
+~~~
 SHELL = /bin/sh
 PATH=/usr/bin:/bin
 PWD=/home/yangkit
@@ -20,7 +20,8 @@ LANGUAGE=en_US:en
 HOME=/home/yangkit
 LOGNAME=yangkit
 _=/usr/bin/env
-{% endhighlight %}
+~~~
+{:.language-bash}
 
 ---
 
