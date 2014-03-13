@@ -16,7 +16,7 @@ kramdown:
 #
 title : Always Somewhere
 tagline: Site Tagline
-url: http://yangkit.lue.so
+url: http://localhost:4000
 author :
   name : kit
   email : yangzhengquan@gmail.com
