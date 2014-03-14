@@ -11,6 +11,7 @@ tags: [carrierwave, ffmpeg, audio convertion, resque, nginx, curl, html5]
 来实现图像的上传、处理等功能，还可以使用Carrierwave生成多种格式的上传文件，这里我们也可以采用
 Carrierwave来实现Rails应用的音频上传。  
 在使用Html5的`audio`元素显示音频时，由于各主流浏览器对于音频的支持各不相同：
+
 <table class='table table-bordered table-striped'>
   <thead>
     <tr>
@@ -93,6 +94,7 @@ make && make install
 {% endhighlight %}
 
 ---
+
 ## 2.streamio-ffmpeg 和 carrierwave-video
 [streamio-ffmpeg](https://github.com/streamio/streamio-ffmpeg)实现了对于ffmpeg的封装，
 [

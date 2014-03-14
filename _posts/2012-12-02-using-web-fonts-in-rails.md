@@ -27,6 +27,7 @@ tags: ['css3', 'assets pipeline', 'woff', 'font-awesome', 'font']
 定义多个字体URI的目的在于兼容更多的浏览器，他们将按顺序查找，直到找到支持的格式。
 外部引用包含一个 URI，后面有一个可选的 `format` 参数可以提示该资源URI 所引用的字体格式。  
 常见的格式字体列表如下：
+
 <table class='table table-bordered table-striped'>
    <thead>
     <tr>
@@ -78,7 +79,9 @@ tags: ['css3', 'assets pipeline', 'woff', 'font-awesome', 'font']
   </td></tr>
   </tbody>
 </table>
+
 ---
+
 ## 2. 设置MIME类型和gzip_static
 在CSS文件中定义使用的web字体之后，还需要对Web服务器做对应的配置，定义MIME类型，通过
 设置http响应头中`Content-Type`,来告诉Web浏览器的资源类型，否则浏览器会出现类似下面
