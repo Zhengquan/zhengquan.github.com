@@ -15,5 +15,5 @@ mv /tmp/blog/* .
 message="Site updated at $(date +'%d-%m-%Y')"
 
 git add -A
-git commit -am $message
+git commit -am "'$message'"
 
