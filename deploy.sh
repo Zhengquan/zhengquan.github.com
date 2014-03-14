@@ -17,3 +17,5 @@ message="Site updated at $(date +'%d-%m-%Y')"
 git add -A
 git commit -am "'$message'"
 
+git push origin master --force
+git checkout 'source'
