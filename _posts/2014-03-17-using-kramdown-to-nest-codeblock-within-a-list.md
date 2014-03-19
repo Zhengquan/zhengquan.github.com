@@ -7,16 +7,18 @@ tags: ['markdown', 'jekyll', 'kradown']
 {% include JB/setup %}
 
 Jekyll默认的Markdown解析引擎为[Maruku](https://github.com/bhollis/maruku), 同时使用[pygments](http://pygments.org/ "Pygments")代码高亮 但是在列表中嵌入代码块时，会出现下面的问题：  
+<a name='code'></a>
+对于下面的Markdown代码：
 
-对于下面的Markdown代码
+
 <pre>
 {% raw %}
 1. item 1
 2. item 2
-  {% highlight ruby %}
-  def foo
-  end
-  {% endhighlight %}
+   {% highlight ruby %}
+   def foo
+   end
+   {% endhighlight %}
 3. item 3
 {% endraw %}
 </pre>
@@ -43,13 +45,13 @@ Jekyll默认的Markdown解析引擎为[Maruku](https://github.com/bhollis/maruku
 </ol>
 ~~~
 
-可以看到，**item 1** 和 **item3** 并没有在一个有序列表中，这个问题主要是由于Jekyll在解析文本之前，会首先解析嵌入的Liquid代码，同时删除`highlight`标签之前所有的空格。 原有的`highlight`标签被替换成了html, 原有的Markdown列表，被Liquid生成的html打断。  
+可以看到，**item 1** 和 **item3** 并没有在一个有序列表中，这个问题主要是由于Jekyll在解析文本之前，会首先解析嵌入的Liquid代码，同时删除`highlight`标签之前所有的空格。 原有的`highlight`标签被替换成了html, Markdown列表被Liquid生成的html打断。  
 
 ---
 
 ### kramdown And Coderay ###
 
-由于Liquid解析模板发生在Markdown解析之前，所以如果使用Liquid来实现代码高亮，这个问题无法回避。[Kramdown](http://kramdown.gettalong.org/ "kramdown")对标准的Markdown语言做了很多改进，就`code block`方面来说，原生地支持指定`code block`的语言，语法如下：  
+由于Liquid解析模板发生在Markdown解析之前，如果使用Liquid来实现代码高亮，这个问题就无法回避。[Kramdown](http://kramdown.gettalong.org/ "kramdown")对标准的Markdown语言做了很多改进，就`code block`方面来说，原生地支持指定`code block`的语言，语法如下：  
 
 <pre>
 {% raw %}
@@ -70,6 +72,32 @@ kramdown:
   coderay:
     coderay_line_numbers: table
 ~~~
+
+对于上面的[Markdown代码](#code)做部分修改，便可以实现在有序列表中插入代码块：
+
+<pre>
+{% raw %}
+1. item 1
+2. item 2
+
+   ~~~ ruby
+   def foo
+   end
+   ~~~
+3. item 3
+{% endraw %}
+</pre>
+
+效果如下：  
+
+1. item 1
+2. item 2
+
+   ~~~ ruby
+   def foo
+   end
+   ~~~
+3. item 3
 
 EOF
 
