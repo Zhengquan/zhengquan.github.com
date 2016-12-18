@@ -121,6 +121,7 @@ var radar_data = [
 			{"name":"Serverless architecture", "pc":{"r":170,"t":120},"movement":"c"},
 			{"name":"Micro Frontends", "pc":{"r":220,"t":120},"movement":"t"},
 			{"name":"Client-directed query", "pc":{"r":240,"t":130},"movement":"t"},
+			{"name":"Reactive architectures", "pc":{"r":230,"t":110},"movement":"t"},
 
 		]
 	},
@@ -151,6 +152,7 @@ var radar_data = [
 			{"name":"Babel", "pc":{"r":40,"t":240},"movement":"c"},   
 			{"name":"Consul", "pc":{"r":60,"t":220},"movement":"c"},   
 			{"name":"Packer", "pc":{"r":80,"t":260},"movement":"t"},   
+			{"name":"Gatling", "pc":{"r":30,"t":200},"movement":"c"},   
 
 			{"name":"Axios", "pc":{"r":110,"t":210},"movement":"t"},   
 			{"name":"Zipkin", "pc":{"r":180,"t":230},"movement":"c"},   
