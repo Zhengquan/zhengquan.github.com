@@ -45,7 +45,7 @@ title: 技术债治理的三条原则
 
 可见的Evolvability问题包括开发速度滞后、功能无法按期交付、系统吞吐量遇到瓶颈难以提升等，这些问题虽然容易察觉，但是问题发生的时候往往“积重难返”。引入的技术债务没有在合适的时间得到解决，其产生的影响会像“滚雪球”一样越滚越大。在我所经历过的项目中有一个不太合理的模型设计，由于错过了最佳的纠正时间，随着业务变化最终不得不做服务拆分时，发现需要修改的调用点竟有近1000多处，而且这些修改点很难借助于IDE或者重构工具来一次性解决，不但增加了团队的负担还直接导致了功能的延期交付。
 
-对于高复杂度、坏味道等不可见的可维护性问题，可以借助比较成熟的静态代码扫描工具来自动识别，比如[SonarQube](https://www.sonarqube.org/)、[checkstyle](https://github.com/checkstyle/checkstyle) 等，但是仅仅在持续集成（Continuous Integration）运行还不够，需要和团队一起自定义扫描规则，并把检查代码扫描报告作为代码审查（Code Review）的一部分，逐步形成一种正向的反馈机制。
+对于高复杂度、霰弹式修改等不可见的可维护性问题，可以借助比较成熟的静态代码扫描工具来自动识别，比如[SonarQube](https://www.sonarqube.org/)、[checkstyle](https://github.com/checkstyle/checkstyle) 等，但是仅仅在持续集成上（Continuous Integration）运行还不够，需要和团队一起自定义扫描规则，并把检查代码扫描报告作为代码审查（Code Review）的一部分，逐步形成一种正向的反馈机制。
 
 所以我们在治理技术债的第二个原则是 “可演进性优于可维护性”。如果把上文提到的可维护性和可演进性使用不同的颜色来标识的话，我们可以得到这样的结果：
 ![Tech Debt Mapping](/assets/images/tech-debt-mapping-2.png)
