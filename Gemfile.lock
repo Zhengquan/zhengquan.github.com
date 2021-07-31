@@ -1,8 +1,8 @@
 GEM
-  source 'https://rubygems.org'
+  remote: https://rubygems.org/
   specs:
     colorator (0.1)
-    ffi (1.9.10)
+    ffi (1.15.3)
     jekyll (3.1.6)
       colorator (~> 0.1)
       jekyll-sass-converter (~> 1.0)
